@@ -2,21 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DisappearBis : MonoBehaviour
+public class Disappear : MonoBehaviour
 {
     SpriteRenderer rend;
     public float disappearTime = 1f;
     public Color colorSet;
     private float initialAlpha;
-    public Disappear d;
     // Start is called before the first frame update
     void Start()
     {
         rend = GetComponent<SpriteRenderer>();
-        Color c = d.colorSet;
-        initialAlpha = d.colorSet.a;
+        Color c = colorSet;
+        initialAlpha = colorSet.a;
         rend.material.color = c;
-        disappearTime = d.disappearTime;
         StartCoroutine("FadeOut");
     }
 

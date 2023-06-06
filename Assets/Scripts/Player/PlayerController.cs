@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed = 5;
 
     private Rigidbody2D myRB;
-    private Camera cam;
     [SerializeField] Transform endRifle;
 
     private float footprintDistanceMax = 1f;
@@ -21,18 +20,13 @@ public class PlayerController : MonoBehaviour
     Transform grabbedObject;
     [SerializeField]Footprints lowerBody;
 
-    [SerializeField]Transform shellPoint;
-    [SerializeField]GameObject shellObject;
-    [SerializeField]GameObject bulletObject;
-    [SerializeField]GameObject fireLight;
-    float lightTime = 0f;
+    [SerializeField]Weapon currentWeapon;
+
     // Start is called before the first frame update
     void Start()
     {
         myRB = GetComponentInChildren<Rigidbody2D>();
         footprintDistance = footprintDistanceMax;
-        cam = Camera.main;
-        fireLight.SetActive(false);
     }
 
     void Update()
@@ -42,9 +36,9 @@ public class PlayerController : MonoBehaviour
         isMoving = Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0;
 
         Debug.DrawLine(endRifle.position,transform.position+(endRifle.position - transform.position)*2);
+        int layerMask = 1 << 9;
+        RaycastHit2D hit = Physics2D.Raycast(endRifle.position,endRifle.position - transform.position, 2f, layerMask);
         if(Input.GetButtonDown("Select")){
-            int layerMask = 1 << 9;
-            RaycastHit2D hit = Physics2D.Raycast(endRifle.position,endRifle.position - transform.position, 2f, layerMask);
             if(isGrabbing){
                 grabbedObject.parent = null;
                 grabbedObject.gameObject.AddComponent<Rigidbody2D>();
@@ -62,6 +56,18 @@ public class PlayerController : MonoBehaviour
                 Destroy(grabbedObject.GetComponentInChildren<Rigidbody2D>());
             }
         }
+        else if(!isGrabbing && hit.collider != null){
+            if(hit.transform != null){
+                if(hit.transform.GetComponent<Movable>() != null){
+                    hit.transform.GetComponent<Movable>().IsHighlighted();
+                }
+            }
+        }
+
+        if(!isMoving || isGrabbing){
+            currentWeapon.IsNotMoving();
+        }
+        currentWeapon.CanFire(!isGrabbing);
 
         HandleShooting();
     }
@@ -90,20 +96,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void HandleShooting(){
-        if(lightTime < 0){
-            lightTime = 0;
-            fireLight.SetActive(false);
-        }
-        else if(lightTime > 0){
-            lightTime -= Time.deltaTime;
-        }
-
-        if(Input.GetButtonDown("Fire1")){
-            fireLight.SetActive(true);
-            lightTime = 0.05f;
-            GameObject go = Instantiate(shellObject, shellPoint.position, Quaternion.Euler(shellPoint.rotation.eulerAngles - new Vector3(0, 0, 90f))); 
-            GameObject go2 = Instantiate(bulletObject, endRifle.position, endRifle.rotation); 
-            cam.GetComponent<CameraScript>().Shake();
+        if(Input.GetButton("Fire1") && !isGrabbing){
+            currentWeapon.Fire();
         }
     }
 }

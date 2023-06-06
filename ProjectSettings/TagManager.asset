@@ -13,14 +13,14 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - PlayerOnGround
   - Movable
   - Player
   - Walls
   - FootPrint
   - LeaveTraces
   - onGround
-  - 
+  - bullet
   - 
   - 
   - 
