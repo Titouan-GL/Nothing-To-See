@@ -465,9 +465,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6008491830347930401}
   - component: {fileID: 4238599740657409082}
-  - component: {fileID: 7048027741992267153}
   - component: {fileID: 2359786909185079528}
-  - component: {fileID: 8966077102724692710}
+  - component: {fileID: 4885044007356418032}
+  - component: {fileID: 1437021359936449125}
   m_Layer: 15
   m_Name: Bullet
   m_TagString: Untagged
@@ -546,19 +546,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7048027741992267153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8754876923062904630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 528e13142cdd88653a8904e3f53f2a57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Explosion: {fileID: 3392011157163441512, guid: 174ddd4e8279a4e9bbf80ba28f5f7e96, type: 3}
 --- !u!50 &2359786909185079528
 Rigidbody2D:
   serializedVersion: 4
@@ -580,7 +567,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &8966077102724692710
+--- !u!114 &4885044007356418032
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -589,7 +576,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 8754876923062904630}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e771088e92698f1698cc81ed841b60d2, type: 3}
+  m_Script: {fileID: 11500000, guid: ae46192b715c04a11a4b9318705491f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   lifetime: 2
+--- !u!114 &1437021359936449125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754876923062904630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3ac6965285d2ea438af4360fb6b0a3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Explosion: {fileID: 3392011157163441512, guid: 174ddd4e8279a4e9bbf80ba28f5f7e96, type: 3}

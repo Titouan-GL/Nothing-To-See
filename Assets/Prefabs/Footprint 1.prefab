@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3314984756246510085}
   - component: {fileID: 1609353014990328247}
   - component: {fileID: 9195772176565372854}
-  - component: {fileID: 3423782984986668557}
+  - component: {fileID: 7545095078284198426}
   m_Layer: 12
   m_Name: Footprint 1
   m_TagString: Untagged
@@ -115,7 +115,7 @@ PolygonCollider2D:
     - - {x: 0, y: 0.5773587}
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
---- !u!114 &3423782984986668557
+--- !u!114 &7545095078284198426
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2057787971064563982}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 293b7fe88eb653515b05e24cd148837d, type: 3}
+  m_Script: {fileID: 11500000, guid: bef77834cdcf59f1f89f0deb4e5b3681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   disappearTime: 1
@@ -139,8 +139,8 @@ GameObject:
   m_Component:
   - component: {fileID: 691127803363022366}
   - component: {fileID: 7428427917471539480}
-  - component: {fileID: 6334274247366405864}
   - component: {fileID: 2466475952038922585}
+  - component: {fileID: 8532542747188721848}
   m_Layer: 12
   m_Name: Circle
   m_TagString: Untagged
@@ -215,21 +215,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6334274247366405864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4152997084290622977}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5a8aa190424e7231974c2114de9b939, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disappearTime: 1
-  colorSet: {r: 0, g: 0, b: 0, a: 0}
-  d: {fileID: 3423782984986668557}
 --- !u!58 &2466475952038922585
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -246,3 +231,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &8532542747188721848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4152997084290622977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 429e36068ea80a0d2bf0789e3fb4e4ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disappearTime: 1
+  colorSet: {r: 0, g: 0, b: 0, a: 0}
+  d: {fileID: 7545095078284198426}
