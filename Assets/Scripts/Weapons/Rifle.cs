@@ -13,6 +13,7 @@ public class Rifle : Weapon
     [SerializeField]GameObject shellObject;
     [SerializeField]GameObject bulletObject;
     [SerializeField]GameObject fireLight;
+    [SerializeField]GameObject rechargeObject;
     float lightTime = 0f;
 
     private GameObject fireAngleR;
@@ -35,6 +36,12 @@ public class Rifle : Weapon
     [SerializeField] private Transform rifleModel;
     Vector3 riflePosition;
 
+
+    [SerializeField] private Animator rifleAnim;
+
+    private bool isReloading;
+
+
     public void Start(){
         reloadTime = 0f;
         reloadTimeMax = 0.1f;
@@ -45,6 +52,11 @@ public class Rifle : Weapon
 
         riflePosition = rifleModel.localPosition;
         CreateFireAngle();
+
+        maxAmmo = 30;
+        currentAmmo = 30;
+        currentRecharges = 1;
+        maxRecharges = 5;
 
     }
 
@@ -86,12 +98,16 @@ public class Rifle : Weapon
     }
 
     public override void CanFire(bool canfire){
-        fireLineL.gameObject.SetActive(canfire);
-        fireLineR.gameObject.SetActive(canfire);
+        fireLineL.gameObject.SetActive(canfire && !isReloading);
+        fireLineR.gameObject.SetActive(canfire && !isReloading);
+    }
+
+    public void NotReloading(){
+        isReloading = false;
     }
 
     public override void Fire(){
-        if(reloadTime <= 0){
+        if(reloadTime <= 0 && currentAmmo > 0 && !isReloading){
             fireLight.SetActive(true);
             lightTime = 0.05f;
             GameObject go = Instantiate(shellObject, shellPoint.position, Quaternion.Euler(shellPoint.rotation.eulerAngles - new Vector3(0, 0, 90f))); 
@@ -105,8 +121,26 @@ public class Rifle : Weapon
                 }
             }
             StartCoroutine(PushBack());
+            currentAmmo -= 1;
         }
     }
+
+    public override void Reload(){
+        if(currentRecharges > 0 && currentAmmo < maxAmmo && !isReloading){
+            rifleAnim.Play("ReloadRifle");
+            isReloading = true;
+        }
+    }
+
+    private void FillAmmo(){
+        currentAmmo = maxAmmo;
+        currentRecharges -= 1;
+    }
+
+    private void EvacuateRecharge(){
+        GameObject go = Instantiate(rechargeObject, shellPoint.position, Quaternion.Euler(shellPoint.rotation.eulerAngles - new Vector3(0, 0, 0f))); 
+    }
+
 
     void CreateFireAngle(){
         fireAngleR = new GameObject("fireAngleR");

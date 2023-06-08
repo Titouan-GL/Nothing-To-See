@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
 
         Debug.DrawLine(endRifle.position,transform.position+(endRifle.position - transform.position)*2);
         int layerMask = 1 << 9;
+        layerMask += 1 << 17;
         RaycastHit2D hit = Physics2D.Raycast(endRifle.position,endRifle.position - transform.position, 2f, layerMask);
         if(Input.GetButtonDown("Select")){
             if(isGrabbing){
@@ -50,10 +51,15 @@ public class PlayerController : MonoBehaviour
             }
             else if(hit.collider != null)
             {
-                isGrabbing = true;
-                hit.transform.parent = transform;
-                grabbedObject = hit.transform;
-                Destroy(grabbedObject.GetComponentInChildren<Rigidbody2D>());
+                if(hit.collider.GetComponentInChildren<Interactible>() != null){
+                    hit.collider.GetComponentInChildren<Interactible>().ChangeActivated();
+                }
+                else if(hit.collider.GetComponentInChildren<Movable>() != null){
+                    isGrabbing = true;
+                    hit.transform.parent = transform;
+                    grabbedObject = hit.transform;
+                    Destroy(grabbedObject.GetComponentInChildren<Rigidbody2D>());
+                }
             }
         }
         else if(!isGrabbing && hit.collider != null){
@@ -98,6 +104,20 @@ public class PlayerController : MonoBehaviour
     private void HandleShooting(){
         if(Input.GetButton("Fire1") && !isGrabbing){
             currentWeapon.Fire();
+        }
+        if(Input.GetButton("Reload") && !isGrabbing){
+            currentWeapon.Reload();
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        AmmoPickup ap = collision.gameObject.GetComponent<AmmoPickup>();
+        if(ap != null && currentWeapon.currentRecharges < currentWeapon.maxRecharges){
+            if(ap.isWorking){//this is a nasty debug
+                Destroy(ap.gameObject);
+                currentWeapon.currentRecharges ++;
+            }
         }
     }
 }
