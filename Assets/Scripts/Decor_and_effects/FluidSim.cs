@@ -6,9 +6,11 @@ using UnityEngine.U2D;
 public class FluidSim : MonoBehaviour
 {
     [SerializeField] GameObject points;
-    private int nbrOfPoints = 30;
+    [SerializeField]private int nbrOfPoints = 30;
     private List<GameObject> pointList = new List<GameObject>();
-    private float distance = 1.8f;
+    [SerializeField]private float distance = 1.8f;
+    [SerializeField]private float evolution = 1f;
+    [SerializeField]private float evolutionPerSeconds = 1f;
 
     private SpriteShapeController shape;
     // Start is called before the first frame update
@@ -64,8 +66,14 @@ public class FluidSim : MonoBehaviour
     }
 
     void Update(){
+        /*int layerMask2 = 1 << 13;
+        Vector2 direction3 = pointList[12].transform.position - pointList[8].transform.position;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pointList[8].transform.position, direction3, direction3.magnitude, layerMask2);
+        Debug.DrawRay(pointList[8].transform.position, direction3, Color.blue);
+        Debug.Log(hits.Length);*/
+
+        Vector2[] allDirections = new Vector2[nbrOfPoints];
         for(int i = 0; i < nbrOfPoints; i ++){
-            pointList[i].transform.position += pointList[i].transform.right * 1f * Time.deltaTime;
             
             shape.spline.SetPosition(i, pointList[i].transform.localPosition);
 
@@ -74,7 +82,27 @@ public class FluidSim : MonoBehaviour
 
             shape.spline.SetRightTangent(i, _newRt);
             shape.spline.SetLeftTangent(i, _newLt);
-            
+
+            Vector2 defaultDirection = Vector2.Perpendicular(_newLt).normalized;
+            int layerMask = 1 << 13;
+            int j = 0;
+            bool isInRange = true;
+            while(j < nbrOfPoints && isInRange){
+                Vector2 direction2 = pointList[ContinuousIndexes(j+i, nbrOfPoints)].transform.position - pointList[i].transform.position;
+                RaycastHit2D[] hits = Physics2D.RaycastAll(pointList[i].transform.position + V2toV3(direction2).normalized*0.1f, direction2- direction2.normalized*0.2f, direction2.magnitude, layerMask);
+
+                Debug.DrawRay(pointList[i].transform.position + V2toV3(direction2).normalized*0.1f, direction2- direction2.normalized*0.2f, Color.green);
+                if(hits.Length == 0/*hit.collider == null*/){
+                    Debug.Log(hits.Length);
+                    allDirections[i] += V3toV2(direction2);
+                    allDirections[j] -= V3toV2(direction2);
+                }
+                j++;
+            }
+        }
+        for(int i = 0; i < nbrOfPoints; i ++){
+            Debug.DrawRay(pointList[i].transform.position, -allDirections[i].normalized, Color.red);
+            pointList[i].transform.position += V2toV3(-allDirections[i].normalized)*Time.deltaTime;
         }
     }
 
@@ -86,5 +114,16 @@ public class FluidSim : MonoBehaviour
             currentIndex -= maxIndex;
         }
         return currentIndex;
+    }
+
+    void FixedUpdate(){
+        evolution *= Mathf.Pow(evolutionPerSeconds, Time.fixedDeltaTime);
+    }
+
+    Vector2 V3toV2 (Vector3 vec){
+        return new Vector2(vec.x, vec.y);
+    }
+    Vector3 V2toV3 (Vector2 vec){
+        return new Vector3(vec.x, vec.y, 0);
     }
 }

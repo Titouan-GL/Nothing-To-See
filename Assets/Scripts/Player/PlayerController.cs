@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
         layerMask += 1 << 17;
         RaycastHit2D hit = Physics2D.Raycast(endRifle.position,endRifle.position - transform.position, 2f, layerMask);
         if(Input.GetButtonDown("Select")){
-            if(isGrabbing){
+            if(isGrabbing){//dropping
                 grabbedObject.parent = null;
                 grabbedObject.gameObject.AddComponent<Rigidbody2D>();
                 grabbedObject.GetComponentInChildren<Rigidbody2D>().gravityScale = 0;
@@ -51,10 +51,10 @@ public class PlayerController : MonoBehaviour
             }
             else if(hit.collider != null)
             {
-                if(hit.collider.GetComponentInChildren<Interactible>() != null){
+                if(hit.collider.GetComponentInChildren<Interactible>() != null){//activating
                     hit.collider.GetComponentInChildren<Interactible>().ChangeActivated();
                 }
-                else if(hit.collider.GetComponentInChildren<Movable>() != null){
+                else if(hit.collider.GetComponentInChildren<Movable>() != null){//picking up
                     isGrabbing = true;
                     hit.transform.parent = transform;
                     grabbedObject = hit.transform;
