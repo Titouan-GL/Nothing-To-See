@@ -21,10 +21,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField]Footprints lowerBody;
 
     [SerializeField]Weapon currentWeapon;
+    [SerializeField] private Animator screenAnimator;
+
+    int life;
+    int lifemax = 100;
 
     // Start is called before the first frame update
     void Start()
     {
+        life = lifemax;
         myRB = GetComponentInChildren<Rigidbody2D>();
         footprintDistance = footprintDistanceMax;
     }
@@ -70,6 +75,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+            
         if(!isMoving || isGrabbing){
             currentWeapon.IsNotMoving();
         }
@@ -119,5 +125,14 @@ public class PlayerController : MonoBehaviour
                 currentWeapon.currentRecharges ++;
             }
         }
+    }
+
+    public float GetLifeFraction(){
+        return (life*1.0f)/lifemax;
+    }
+
+    public void IsDamaged(int damage){
+        life -= damage;
+        screenAnimator.Play("DamageFade");
     }
 }
